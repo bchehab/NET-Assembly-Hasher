@@ -1,0 +1,90 @@
+<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="C:\Users\bchehab\Desktop\AssemblyHasher\FileHasher\bin\Debug\FileHasher.dll" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="FileHasher" #>
+<#
+    var buildConfig = this.Host.ResolveParameterValue("-","-","BuildConfiguration");
+
+    string output = File.ReadAllText(this.Host.ResolvePath("AssemblyInfo.cs"));
+
+    Regex pattern = new Regex("AssemblyVersion\\(\"(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<revision>\\d+)\\.(?<build>\\d+)\"\\)");
+            MatchCollection matches = pattern.Matches(output);
+            if( matches.Count == 1 )
+            {
+                major = Convert.ToInt32(matches[0].Groups["major"].Value);
+                minor = Convert.ToInt32(matches[0].Groups["minor"].Value);
+                build = Convert.ToInt32(matches[0].Groups["build"].Value);
+                revision = Convert.ToInt32(matches[0].Groups["revision"].Value);
+            }
+
+    var releaseRegex = new Regex("ReleaseHash\\(\"(.*?)\"\\)");
+    var devRegex = new Regex("DevHash\\(\"(.*?)\"\\)");
+
+    MatchCollection devMatches = devRegex.Matches(output);
+    MatchCollection releaseMatches = releaseRegex.Matches(output);
+
+    string devHash = string.Empty;
+    string releaseHash = string.Empty;
+
+    if(devMatches.Count == 1){
+        devHash = devMatches[0].Groups[1].Value;
+        releaseHash = releaseMatches.Count == 1 ? releaseMatches[0].Groups[1].Value : string.Empty;
+
+        if(buildConfig == "Release" && devHash != (releaseHash ?? devHash)){
+            releaseHash = devHash;
+            revision++;
+        }
+    }
+
+    if(buildConfig == "Debug" && this.Host.ResolveParameterValue("-","-","PostBuild") == "true"){
+      var dllPath = Path.Combine(this.Host.ResolvePath(""),"..","bin","debug",$"{assemblyName}.dll");
+
+      var p = new Process();  
+      p.StartInfo.UseShellExecute = false;  
+      p.StartInfo.RedirectStandardOutput = true; 
+      p.StartInfo.FileName = $"AssemblyHasher.exe";
+      p.StartInfo.Arguments = @"C:\Users\bchehab\Desktop\AssemblyHasher\ClassLibrary1\bin\Debug\ClassLibrary1.dll";
+      p.Start();  
+
+      // To avoid deadlocks, always read the output stream first and then wait.  
+      string hash = p.StandardOutput.ReadToEnd();  
+      p.WaitForExit();
+      devHash = hash;
+    }
+#>
+
+using System.Reflection;
+using System.Resources;
+using AssemblyHash;
+
+// General Information
+[assembly: AssemblyTitle("<#= assemblyName #>")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("<#= assemblyName #>")]
+[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+
+//hash Info
+[assembly: ReleaseHash("<#= releaseHash #>")]
+[assembly: DevHash("<#= devHash #>")]
+
+// Version informationr(
+[assembly: AssemblyVersion("<#= this.major #>.<#= this.minor #>.<#= this.revision #>.<#= this.build #>")]
+[assembly: AssemblyFileVersion("<#= this.major #>.<#= this.minor #>.<#= this.revision #>.<#= this.build #>")]
+[assembly: NeutralResourcesLanguageAttribute( "en-US" )]
+
+<#+
+    string assemblyName = "ClassLibrary1";
+    
+    int major = 1;
+    int minor = 0;
+    int revision = 0;
+    int build = 0;
+#>
