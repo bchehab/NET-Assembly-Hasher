@@ -54,7 +54,6 @@
       devHash = hash;
     }
 #>
-
 using System.Reflection;
 using System.Resources;
 using AssemblyHash;
