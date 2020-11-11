@@ -1,11 +1,9 @@
 <#@ template debug="true" hostspecific="true" language="C#" #>
 <#@ output extension=".cs" #>
-<#@ assembly name="C:\Users\bchehab\Desktop\AssemblyHasher\FileHasher\bin\Debug\FileHasher.dll" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 <#@ import namespace="System.Reflection" #>
 <#@ import namespace="System.Diagnostics" #>
-<#@ import namespace="FileHasher" #>
 <#
     var buildConfig = this.Host.ResolveParameterValue("-","-","BuildConfiguration");
 
