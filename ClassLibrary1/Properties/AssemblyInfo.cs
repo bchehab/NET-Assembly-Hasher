@@ -14,11 +14,11 @@ using AssemblyHash;
 [assembly: AssemblyCulture("")]
 
 //hash Info
-[assembly: ReleaseHash("EiPFbtndwbbk5RZhheezVw==")]
+[assembly: ReleaseHash("rj5jQP+mF1YlaK0DdfQJmA==")]
 [assembly: DevHash("rj5jQP+mF1YlaK0DdfQJmA==")]
 
 // Version informationr(
-[assembly: AssemblyVersion("1.0.3.0")]
-[assembly: AssemblyFileVersion("1.0.3.0")]
+[assembly: AssemblyVersion("1.0.4.0")]
+[assembly: AssemblyFileVersion("1.0.4.0")]
 [assembly: NeutralResourcesLanguageAttribute( "en-US" )]
 
