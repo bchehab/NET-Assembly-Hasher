@@ -4,7 +4,6 @@ using System.Reflection;
 namespace AssemblyHash
 {
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
-    [ObfuscationAttribute(Exclude = true, ApplyToMembers = false)]
     public class DevHashAttribute: Attribute
     {
         string hashText;
