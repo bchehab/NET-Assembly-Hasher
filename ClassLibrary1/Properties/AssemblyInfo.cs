@@ -15,7 +15,7 @@ using AssemblyHash;
 
 //hash Info
 [assembly: ReleaseHash("rj5jQP+mF1YlaK0DdfQJmA==")]
-[assembly: DevHash("rj5jQP+mF1YlaK0DdfQJmA==")]
+[assembly: DevHash("EiPFbtndwbbk5RZhheezVw==")]
 
 // Version informationr(
 [assembly: AssemblyVersion("1.0.4.0")]
